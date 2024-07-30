@@ -1,0 +1,20 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--chakra-colors-green-800);
+    height: 55px;
+}
+.mm-logo{
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+}
+.main-menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+}

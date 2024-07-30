@@ -1,0 +1,12 @@
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    background-color: var(--chakra-colors-green-800);
+    height: 55px;
+}
+.mm-footer-copy{
+    color: white;
+    font-weight: 400;
+    font-size: 14px;
+}
