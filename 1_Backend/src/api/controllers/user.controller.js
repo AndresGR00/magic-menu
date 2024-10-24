@@ -100,7 +100,7 @@ const deleteAnUser = async (req, res, next) => {
 
 const addRecipeToUser = async (req, res, next) => {
   try {
-    const { userId, recipeId } = req.params; // Ver si lo saco de body o params
+    const { userId, recipeId } = req.body; // Lo saco de body
     const user = await User.findById(userId);
     if (!user) return handleResponse(res, 404, "User not found");
     

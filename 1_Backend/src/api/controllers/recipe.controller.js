@@ -51,6 +51,7 @@ const createRecipe = async (req, res, next) => {
       time: req.body.time,
       tags: req.body.tags,
       createdBy: req.body.createdBy,
+      ingredients: req.body.ingredients,
       defaultRecipe: false,
     };
     const newRecipe = await creatingRecipe(recipeData);
@@ -59,6 +60,7 @@ const createRecipe = async (req, res, next) => {
 
     return handleResponse(res, 201, newRecipe);
   } catch (error) {
+    console.error("Error creating recipe:", error);
     return handleResponse(res, 500, error);
   }
 };

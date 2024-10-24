@@ -1,0 +1,5 @@
+.mm-sidebar-filters-difficulty-range, .mm-sidebar-filters-time-range{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

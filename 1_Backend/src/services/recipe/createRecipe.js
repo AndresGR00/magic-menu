@@ -11,7 +11,7 @@ const getRecipeIcon = (mainIngredient) => {
   return icon ? icon.url : "";
 };
 
-const creatingRecipe = async () => {
+const creatingRecipe = async (recipeData) => {
   const picture = getRecipeIcon(recipeData.mainIngredient);
   const newRecipe = new Recipe({
     ...recipeData,

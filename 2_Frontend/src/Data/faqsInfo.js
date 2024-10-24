@@ -15,13 +15,13 @@ export const FAQS_INFO = [
     id: 3,
     question: "How do I upload my recipes?",
     answer:
-      "Once you are logged in, you can upload your recipes by clicking on the ‘Upload Recipes’ button on your dashboard.",
+      "Once you are logged in, you can upload your recipes by clicking on the ‘New Recipe’ button on your dashboard.",
   },
   {
     id: 4,
     question: "Can I edit or delete my recipes?",
     answer:
-      "Yes, you can edit or delete your recipes at any time from your dashboard.",
+      "No, you can only create and delete them. The goal is to have them collected in one place without being able to change them.",
   },
   {
     id: 5,
@@ -39,6 +39,6 @@ export const FAQS_INFO = [
     id: 7,
     question: "Can I use the platform on my mobile?",
     answer:
-      "Yes, our platform is fully responsive and you can access all its functionalities from your mobile device. However, we recommend that if you are going to upload your recipes en bloc you do it through a computer.",
+      "Yes, our platform is fully responsive and you can access all its functionalities from your mobile device. However, we recommend that if you are going to upload your recipes in block you do it through a computer.",
   },
 ];

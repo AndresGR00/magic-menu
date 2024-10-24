@@ -11,13 +11,21 @@ import {
   Heading,
   SimpleGrid,
   StackDivider,
-  useColorModeValue,
   List,
   ListItem,
   Badge,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getOneRecipe } from "../Services/Api/getOneRecipe";
+import { deleteRecipeFromAnUser } from "../Services/Api/deleteRecipeFromAnUser";
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -27,6 +35,16 @@ const RecipeDetail = () => {
   const [badgeColor, setBadgeColor] = useState("black");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleDeleteRecipe = async (id) => {
+    try {
+      deleteRecipeFromAnUser(id)
+      navigate('/recipes')
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -39,9 +57,8 @@ const RecipeDetail = () => {
         setBadgeColor(item.color);
       } catch (error) {
         setError(error);
-        console.log("hola")
-        navigate("..")
-        navigate("/not-found")
+        navigate("..");
+        navigate("/not-found");
       } finally {
         setLoading(false);
       }
@@ -88,11 +105,7 @@ const RecipeDetail = () => {
             <Stack
               spacing={{ base: 4, sm: 6 }}
               direction={"column"}
-              divider={
-                <StackDivider
-                  borderColor={"gray.200"}
-                />
-              }
+              divider={<StackDivider borderColor={"gray.200"} />}
             >
               <VStack spacing={{ base: 2, sm: 2 }} align="start">
                 <Badge bgColor={badgeBgColor} color={badgeColor}>
@@ -161,6 +174,31 @@ const RecipeDetail = () => {
                 </List>
               </Box>
             </Stack>
+
+            <Button onClick={onOpen} colorScheme="red" variant="outline">
+              Delete Recipe
+            </Button>
+            <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose} isCentered>
+              <ModalOverlay />
+
+              <ModalContent bg="white" borderRadius="md">
+                <ModalCloseButton color="green.500" />{" "}
+                <ModalBody>
+                  <Text fontWeight="bold" mb="1rem">
+                    This action cannot be undone
+                  </Text>
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="green" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+
+                  <Button colorScheme="red" variant="solid" onClick={() => handleDeleteRecipe(id)}>
+                    Delete Recipe
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </Stack>
         </SimpleGrid>
       </Container>

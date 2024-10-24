@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Flex,
@@ -6,41 +6,41 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
   Button,
   Heading,
   Text,
   useColorModeValue,
+  InputGroup,
+  InputRightElement,
+  Checkbox,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { loginUser } from "../Services/Api/loginUser";
+import { errorsMessagesInLoginForm } from "../utils/errorsMessagesInForms";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  } = useForm();
+  const navigate = useNavigate()
+  const { login } = useAuth();
 
   const onSubmit = async (data) => {
-    try {
-      console.log(data);
-      const response = await loginUser(data);
-      alert("User Logged");
+    const response = await loginUser(data);
+    if (response.token) {
       localStorage.setItem("token", response.token);
-      localStorage.setItem("userID", response.user._id);
-    } catch (error) {
-      console.log(error)
-      setError("apiError", {
-        type: "manual",
-        message: error.message || "Something went wrong",
-      });
+      login(response.user._id)
+      alert("Login successful!");
+      navigate("/")
+    } else {
+      alert(response.message || "Login failed. Please try again.");
     }
   };
 
@@ -49,7 +49,9 @@ const Login = () => {
       <Flex align={"center"} justify={"center"}>
         <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Stack align={"center"}>
-            <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+            <Heading fontSize={"4xl"} textAlign={"center"}>
+              Sign in to your account
+            </Heading>
             <Text fontSize={"lg"} color={"gray.600"}>
               to enjoy all of our cool features
             </Text>
@@ -60,54 +62,72 @@ const Login = () => {
             boxShadow={"lg"}
             p={8}
           >
-            <Stack spacing={4}>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl id="email" isInvalid={errors.email}>
-                  <FormLabel>Email</FormLabel>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Stack spacing={4}>
+                <FormControl id="email" isRequired isInvalid={errors.email}>
+                  <FormLabel>Email address</FormLabel>
                   <Input
                     type="email"
                     {...register("email", {
-                      required: "Email is required",
+                      required: errorsMessagesInLoginForm.required,
                       pattern: {
-                        value:
-                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                        message: "Invalid email address",
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: errorsMessagesInLoginForm.invalidEmail,
                       },
                     })}
                   />
-                  {errors.email && (
-                    <Text color="red.500" mt={2}>
-                      {errors.email.message}
-                    </Text>
-                  )}
+                  <FormErrorMessage>
+                    {errors.email && errors.email.message}
+                  </FormErrorMessage>
                 </FormControl>
-                <FormControl id="password" isInvalid={errors.password}>
+
+                <FormControl
+                  id="password"
+                  isRequired
+                  isInvalid={errors.password}
+                >
                   <FormLabel>Password</FormLabel>
-                  <Input
-                    type="password"
-                    {...register("password", {
-                      required: "Password is required",
-                    })}
-                  />
-                  {errors.password && (
-                    <Text color="red.500" mt={2}>
-                      {errors.password.message}
-                    </Text>
-                  )}
+                  <InputGroup>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      {...register("password", {
+                        required: errorsMessagesInLoginForm.required,
+                        minLength: {
+                          value: 6,
+                          message: errorsMessagesInLoginForm.minLength,
+                        },
+                      })}
+                    />
+                    <InputRightElement h={"full"}>
+                      <Button
+                        variant={"ghost"}
+                        onClick={() =>
+                          setShowPassword((showPassword) => !showPassword)
+                        }
+                      >
+                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormErrorMessage>
+                    {errors.password && errors.password.message}
+                  </FormErrorMessage>
                 </FormControl>
-                <Stack spacing={10} mt={4}>
+
+                <Stack spacing={10} pt={2}>
                   <Stack
                     direction={{ base: "column", sm: "row" }}
                     align={"start"}
                     justify={"space-between"}
                   >
                     <Checkbox>Remember me</Checkbox>
-                    <Text color={"green.600"}>Forgot password?</Text>
+                    <Text color={"green.400"}>Forgot password?</Text>
                   </Stack>
                   <Button
-                    onSubmit={onSubmit}
                     type="submit"
-                    bg={"green.600"}
+                    loadingText="Submitting"
+                    size="lg"
+                    bg={"green.400"}
                     color={"white"}
                     _hover={{
                       bg: "green.500",
@@ -116,8 +136,8 @@ const Login = () => {
                     Sign in
                   </Button>
                 </Stack>
-              </form>
-            </Stack>
+              </Stack>
+            </form>
           </Box>
         </Stack>
       </Flex>

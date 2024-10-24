@@ -1,26 +1,17 @@
 import React from "react";
 import { Box, Button, useBreakpointValue, Heading } from "@chakra-ui/react";
-import { generateRandomRecipe } from "../Services/Api/generateRandomRecipe";
 import { useNavigate } from "react-router-dom";
 
-const Generator = () => {
+const NewRecipe = () => {
   const flexDirection = useBreakpointValue({ base: "column", md: "row" });
-  const userId = localStorage.getItem('id');
   const navigate = useNavigate();
 
-  const handleGenerateRecipe = async () => {
-    try {
-      const randomId = await generateRandomRecipe(userId);
-      if (randomId) {
-        navigate(`/recipe/${randomId}`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const handleCreateNewRecipe = () => {
+    navigate(`/create-new-recipe`);
   };
 
-  const handleWeeklyMenu = () => {
-    navigate("/weekly-menu");
+  const handleBulkRecipes = () => {
+    navigate("/bulk-recipes");
   };
 
   return (
@@ -37,7 +28,7 @@ const Generator = () => {
           textAlign={"center"}
           p={4}
         >
-          Generate a recipe or a complete weekly menu.
+          Choose your option.
         </Heading>
       </Box>
       <Box
@@ -50,24 +41,24 @@ const Generator = () => {
         justifyContent="center"
       >
         <Button
-          onClick={handleGenerateRecipe}
+          onClick={handleCreateNewRecipe}
           colorScheme="green"
           width="280px"
           size="lg"
         >
-          One Recipe
+          Create One Recipe
         </Button>
         <Button
-          onClick={handleWeeklyMenu}
+          onClick={handleBulkRecipes}
           colorScheme="green"
           width="280px"
           size="lg"
         >
-          Weekly Menu
+          Bulk Recipes
         </Button>
       </Box>
     </div>
   );
 };
 
-export default Generator;
+export default NewRecipe;

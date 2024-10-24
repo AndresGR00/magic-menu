@@ -1,17 +1,23 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useBreakpointValue } from "@chakra-ui/react";
 import "../Header/header.css";
-import { useState } from "react";
 import MenuLinks from "../MenuLinks/MenuLinks";
 import MobileDrawer from "../DrawerMenu/DrawerMenu";
 import { LINKS_NAV_DATA } from "../../../Data/linksNavData";
+import { useAuth } from "../../../Context/AuthContext";
 
 const Header = () => {
-  const [userLogged] = useState(true);
+  const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const linksToShow = userLogged
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const linksToShow = isLoggedIn
     ? LINKS_NAV_DATA.filter((link) =>
-        ["Recipes", "Generator", "Log Out"].includes(link.name)
+        ["Recipes", "Generator", "New Recipe", "Log Out"].includes(link.name)
       )
     : LINKS_NAV_DATA.filter((link) =>
         ["Log In", "Register"].includes(link.name)
@@ -30,10 +36,11 @@ const Header = () => {
             links={linksToShow}
             ulClass="main-menu"
             liClass="main-item"
+            onLogout={handleLogout}
           />
         </nav>
       ) : (
-        <MobileDrawer links={linksToShow} />
+        <MobileDrawer links={linksToShow} onLogout={handleLogout} />
       )}
     </header>
   );
