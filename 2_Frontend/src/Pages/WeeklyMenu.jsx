@@ -9,7 +9,6 @@ import "jspdf-autotable";
 
 const WeeklyMenu = () => {
   const userId = localStorage.getItem('id');
-  const userName = "Admin";
   const [weekMenu, setWeekMenu] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +34,7 @@ const WeeklyMenu = () => {
   const handleGeneratePDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(18);
-    doc.text(`Weekly Menu: ${userName}`, 14, 22);
+    doc.text(`Weekly Menu`, 14, 22);
 
     const pdfData = weekMenu.map((recipe) => ({
       Title: recipe.title,
@@ -71,7 +70,7 @@ const WeeklyMenu = () => {
       startY: 30,
     });
 
-    doc.save(`weekly_menu_recipes_${userName.toLowerCase()}.pdf`);
+    doc.save(`weekly_menu_recipes.pdf`);
   };
 
   return (
