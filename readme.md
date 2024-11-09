@@ -88,11 +88,6 @@ In order to enjoy all the features of the project you will need to create an use
 
 ---
 
-## Live Demo 🌐
-
-Visit the live application [here](enlace).
-
----
 
 ## Maintenance 🔧
 
