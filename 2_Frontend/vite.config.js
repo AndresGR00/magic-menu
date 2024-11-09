@@ -5,8 +5,6 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   define: {
-    __APP_ENV__: process.env.VITE_API_URL,
-    "process.env": process.env,
-    "import.meta.env.VITE_API_URL": JSON.stringify(process.env.VITE_API_URL),
+    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL),
   },
 });
