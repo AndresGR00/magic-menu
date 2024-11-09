@@ -2,7 +2,8 @@ const recipeRouter = require("express").Router();
 const recipeController = require("../controllers/recipe.controller");
 const { isAuth, isAdmin } = require("../../middlewares/auth");
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+/* const upload = multer({ dest: 'uploads/' }); */
+const upload = multer({ storage: multer.memoryStorage() });
 
 recipeRouter.get("/all-recipes", recipeController.getAllRecipes);
 recipeRouter.get("/recipe/:id", recipeController.getRecipeById);

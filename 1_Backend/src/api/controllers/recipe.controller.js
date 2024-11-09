@@ -1,11 +1,9 @@
 const Recipe = require("../models/recipe.model");
 const { handleResponse } = require("../../utils/handleResponse");
-const path = require("path");
 const { handleFileUpload } = require("../../services/recipe/bulkRecipe");
 const {
   createRecipeTemplateWorkbook,
-  saveWorkbookToFile,
-  deleteFile,
+  getWorkbookBuffer,
 } = require("../../services/recipe/getTemplate");
 const {
   creatingRecipe,
@@ -108,17 +106,25 @@ const deleteARecipe = async (req, res, next) => {
 const getTemplateRecipe = async (req, res, next) => {
   try {
     const workbook = createRecipeTemplateWorkbook();
-    const templatePath = path.join(__dirname, "recipes_template.xlsx");
+    /* const templatePath = path.join(__dirname, "recipes_template.xlsx"); */
+    /* await saveWorkbookToFile(workbook, templatePath); */
+    
+    const buffer = await getWorkbookBuffer(workbook);
 
-    await saveWorkbookToFile(workbook, templatePath);
-
-    res.download(templatePath, "recipes_template.xlsx", (error) => {
+    /* res.download(templatePath, "recipes_template.xlsx", (error) => {
       if (error) {
         return handleResponse(res, 500, error);
       } else {
         deleteFile(templatePath);
       }
+    }); */
+
+    res.set({
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': 'attachment; filename="recipes_template.xlsx"',
+      'Content-Length': buffer.length
     });
+    return res.send(buffer);
   } catch (error) {
     return handleResponse(res, 500, error);
   }
@@ -131,13 +137,16 @@ const createBulkRecipes = async (req, res, next) => {
     if (!file) return handleResponse(res, 400, "No file uploaded");
 
     const { userId } = req.body; //Ver si saco de body o params
-    const createdRecipes = await handleFileUpload(file.path, userId);
+    /* const createdRecipes = await handleFileUpload(file.path, userId);
     return handleResponse(
       res,
       200,
       "Recipes created successfully",
       createdRecipes
-    );
+    ); */
+
+    const createdRecipes = await handleFileUpload(file.buffer, userId);
+    return handleResponse(res, 200, "Recipes created successfully", createdRecipes);
   } catch (error) {
     console.log(error);
     return handleResponse(res, 500, error);

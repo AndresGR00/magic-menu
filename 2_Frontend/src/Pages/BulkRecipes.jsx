@@ -8,11 +8,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { getRecipesBulkTemplate } from "../Services/Api/getRecipesBulkTemplate";
+import { uploadBulkRecipes } from "../Services/Api/uploadBulkRecipes";
+import { useNavigate } from "react-router-dom";
 
 const BulkRecipes = () => {
   const [file, setFile] = useState(null);
   const flexDirection = useBreakpointValue({ base: "column", md: "row" });
   const userId = localStorage.getItem('id');
+  const navigate = useNavigate()
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -29,11 +32,13 @@ const BulkRecipes = () => {
     }
 
     try {
+      console.log("Uploading file:", file);
       const response = await uploadBulkRecipes(file, userId);
       alert("File uploaded successfully!");
+      navigate('/recipes')
     } catch (error) {
+      console.error("Error in handleUploadBulkRecipes:", error);
       alert("Failed to upload the file");
-      console.error(error);
     }
   };
 

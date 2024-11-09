@@ -1,7 +1,5 @@
-// services/templateService.js
-const ExcelJS = require('exceljs');
-/* const path = require('path'); */
-const fs = require('fs');
+const ExcelJS = require("exceljs");
+const fs = require("fs");
 
 const createRecipeTemplateWorkbook = () => {
   const workbook = new ExcelJS.Workbook();
@@ -22,7 +20,7 @@ const createRecipeTemplateWorkbook = () => {
     title: "Example Title",
     description: "Example Description",
     mainIngredient: "meat",
-    ingredients: "30gr chicken, 100gr rice",
+    ingredients: "30g chicken, 100g rice",
     rating: 5,
     difficulty: 3,
     time: 60,
@@ -34,16 +32,20 @@ const createRecipeTemplateWorkbook = () => {
   return workbook;
 };
 
-const saveWorkbookToFile = async (workbook, filePath) => {
+/* const saveWorkbookToFile = async (workbook, filePath) => {
   await workbook.xlsx.writeFile(filePath);
+}; */
+
+const getWorkbookBuffer = async (workbook) => {
+  const buffer = await workbook.xlsx.writeBuffer();
+  return buffer;
 };
 
-const deleteFile = (filePath) => {
+/* const deleteFile = (filePath) => {
   fs.unlinkSync(filePath);
-};
+}; */
 
 module.exports = {
   createRecipeTemplateWorkbook,
-  saveWorkbookToFile,
-  deleteFile,
+  getWorkbookBuffer,
 };

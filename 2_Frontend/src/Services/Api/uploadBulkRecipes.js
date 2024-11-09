@@ -7,7 +7,7 @@ export const uploadBulkRecipes = async (file, userId) => {
     formData.append('file', file);
     formData.append('userId', userId);
 
-    const response = await axios.post(`${VITE_API_URL}/create-bulk-recipes`, formData, {
+    const response = await axios.post(`${VITE_API_URL}/create-recipe-bulk`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

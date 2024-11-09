@@ -1,5 +1,4 @@
 const ExcelJS = require("exceljs");
-const fs = require("fs");
 const { RECIPE_ICONS } = require("../../utils/recipeIcons");
 const Recipe = require("../../api/models/recipe.model");
 const MainIngredient = require("../../api/models/mainIngredient.model");
@@ -74,7 +73,7 @@ const createRecipesFromWorksheet = (worksheet, userId) => {
   return recipes;
 };
 
-const handleFileUpload = async (filePath, userId) => {
+/* const handleFileUpload = async (filePath, userId) => {
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.readFile(filePath);
   const worksheet = workbook.getWorksheet(1);
@@ -83,6 +82,20 @@ const handleFileUpload = async (filePath, userId) => {
   await addRecipesToMainIngredient(createdRecipes);
   await addRecipesToUser(userId, createdRecipes);
   fs.unlinkSync(filePath);
+  return createdRecipes;
+}; */
+
+const handleFileUpload = async (fileBuffer, userId) => {
+  const workbook = new ExcelJS.Workbook();
+
+  await workbook.xlsx.load(fileBuffer);
+  const worksheet = workbook.getWorksheet(1);
+  const recipesData = createRecipesFromWorksheet(worksheet, userId);
+
+  const createdRecipes = await Recipe.insertMany(recipesData);
+  await addRecipesToMainIngredient(createdRecipes);
+  await addRecipesToUser(userId, createdRecipes);
+
   return createdRecipes;
 };
 
