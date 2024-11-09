@@ -6,13 +6,18 @@ const mainRouter = require("./src/api/routes/mainRouter");
 
 const corsOptions = {
   origin: "*",
-  methods: "GET,PUT,POST,DELETE",
+  methods: "GET, POST, PUT, DELETE",
+  allowedHeaders: "Content-Type, Authorization",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 
 const app = express();
 app.disable("x-powered-by");
-app.use(express.json());
+
+
 app.use(cors(corsOptions));
+app.use(express.json());
 
 connectDB();
 
