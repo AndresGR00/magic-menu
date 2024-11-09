@@ -32,7 +32,6 @@ const BulkRecipes = () => {
     }
 
     try {
-      console.log("Uploading file:", file);
       const response = await uploadBulkRecipes(file, userId);
       alert("File uploaded successfully!");
       navigate('/recipes')

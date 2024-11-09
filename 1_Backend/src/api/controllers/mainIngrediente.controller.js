@@ -47,7 +47,7 @@ const createMainIngredient = async (req, res, next) => {
 // Post - Add recipe to the array of main ingredients
 const addRecipeToMainIngredient = async (req, res, next) => {
   try {
-    const { recipeId, mainIngredientId } = req.body; //Decidir si lo saco de body o params
+    const { recipeId, mainIngredientId } = req.body;
     const mainIngredient = await MainIngredient.findById(mainIngredientId);
     mainIngredient.recipes.push(recipeId);
     await mainIngredient.save();
@@ -92,7 +92,7 @@ const addRecipeToMainIngredient = async (req, res, next) => {
 //Delete - Delete recipe from the array of mainIngredient
 const removeRecipeFromMainIngredient = async (req, res, next) => {
   try {
-    const { recipeId, mainIngredientId } = req.body; //Decidir si lo saco de body o params
+    const { recipeId, mainIngredientId } = req.body;
     const mainIngredient = await MainIngredient.findById(mainIngredientId);
     mainIngredient.recipes = mainIngredient.recipes.filter(
       (id) => id.toString() !== recipeId.toString()

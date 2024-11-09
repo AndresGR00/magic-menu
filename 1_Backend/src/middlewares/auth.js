@@ -38,7 +38,6 @@ const isAdmin = async (req, res, next) => {
       return res.status(400).json("You need to be an administrator");
     }
   } catch (error) {
-    console.log(error)
     return res.status(400).json("Access not allowed");
   }
 };

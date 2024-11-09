@@ -97,7 +97,6 @@ const deleteARecipe = async (req, res, next) => {
     await Recipe.findByIdAndDelete(id);
     return handleResponse(res, 200, "Recipe deleted");
   } catch (error) {
-    console.log(error);
     return handleResponse(res, 500, error);
   }
 };
@@ -148,7 +147,6 @@ const createBulkRecipes = async (req, res, next) => {
     const createdRecipes = await handleFileUpload(file.buffer, userId);
     return handleResponse(res, 200, "Recipes created successfully", createdRecipes);
   } catch (error) {
-    console.log(error);
     return handleResponse(res, 500, error);
   }
 };

@@ -64,7 +64,7 @@ const createRecipesFromWorksheet = (worksheet, userId) => {
         time: rowData[7],
         tags: rowData[8] ? rowData[8].split(",").map((tag) => tag.trim().toLowerCase()) : [],
         createdBy: userId,
-        defaultRecipe: false, //Cambiar cuando suba las predeterminadas
+        defaultRecipe: false,
       };
 
       recipes.push(recipe);

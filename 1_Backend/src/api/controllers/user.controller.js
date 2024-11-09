@@ -40,7 +40,6 @@ const createAnUser = async (req, res, next) => {
     if (userDuplicated)
       return handleResponse(res, 400, "This email already exists");
     const createNewUser = await newUser.save();
-    console.log(createNewUser);
     return handleResponse(res, 201, createNewUser);
   } catch (error) {
     return handleResponse(res, 500, error);
@@ -57,14 +56,11 @@ const loginUser = async (req, res, next) => {
 
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = generateSign(user._id);
-      console.log('Generated token:', token);
       return handleResponse(res, 200, { user, token });
     } else {
-      console.log(bcrypt.compareSync(req.body.password, user.password))
       return handleResponse(res, 400, "Email or password is incorrect");
     }
   } catch (error) {
-    console.log('Password comparison failed', req.body.password, user.password);
     return handleResponse(res, 400, error);
   }
 };
@@ -84,7 +80,6 @@ const editAnUser = async (req, res, next) => {
     });
     return handleResponse(res, 200, updatedUser);
   } catch (error) {
-    console.log(error)
     return handleResponse(res, 500, error);
   }
 };
@@ -102,7 +97,7 @@ const deleteAnUser = async (req, res, next) => {
 
 const addRecipeToUser = async (req, res, next) => {
   try {
-    const { userId, recipeId } = req.body; // Lo saco de body
+    const { userId, recipeId } = req.body;
     const user = await User.findById(userId);
     if (!user) return handleResponse(res, 404, "User not found");
     
@@ -121,7 +116,7 @@ const addRecipeToUser = async (req, res, next) => {
 //Delete a recipe to user
 const deleteRecipeToUser = async (req, res, next) => {
   try {
-    const { userId, recipeId } = req.params; // Ver si saco de body o params
+    const { userId, recipeId } = req.params;
     const user = await User.findById(userId);
     if (!user) return handleResponse(res, 404, "User not found");
 

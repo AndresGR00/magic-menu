@@ -38,7 +38,7 @@ const CreateNewRecipe = () => {
 
   const userId = localStorage.getItem('id');
 
-  // Observa el campo 'mainIngredient' para asignar automáticamente la imagen
+
   const mainIngredient = watch("mainIngredient");
 
   const onSubmit = async (data) => {
