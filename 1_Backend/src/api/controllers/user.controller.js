@@ -57,12 +57,14 @@ const loginUser = async (req, res, next) => {
 
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = generateSign(user._id);
+      console.log('Generated token:', token);
       return handleResponse(res, 200, { user, token });
     } else {
       console.log(bcrypt.compareSync(req.body.password, user.password))
       return handleResponse(res, 400, "Email or password is incorrect");
     }
   } catch (error) {
+    console.log('Password comparison failed', req.body.password, user.password);
     return handleResponse(res, 400, error);
   }
 };

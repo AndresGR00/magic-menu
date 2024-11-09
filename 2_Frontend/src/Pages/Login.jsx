@@ -34,6 +34,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     const response = await loginUser(data);
+    console.log('Login response:', response);
     if (response.token) {
       localStorage.setItem("token", response.token);
       login(response.user._id)
