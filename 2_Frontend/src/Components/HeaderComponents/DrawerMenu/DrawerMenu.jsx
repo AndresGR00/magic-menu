@@ -20,11 +20,13 @@ const MobileDrawer = ({ links }) => {
   return (
     <>
       <IconButton
-        icon={<HamburgerIcon />}
+        icon={<HamburgerIcon boxSize="25px" />}
         ref={btnRef}
-        colorScheme="green"
+        color="white"
+        variant="plain"
         onClick={onOpen}
         aria-label="Open Menu"
+        size="md"
       />
       <Drawer
         isOpen={isOpen}
