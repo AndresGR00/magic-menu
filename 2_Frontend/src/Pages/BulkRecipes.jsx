@@ -6,6 +6,7 @@ import {
   Heading,
   Input,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { getRecipesBulkTemplate } from "../Services/Api/getRecipesBulkTemplate";
 import { uploadBulkRecipes } from "../Services/Api/uploadBulkRecipes";
@@ -16,6 +17,7 @@ const BulkRecipes = () => {
   const flexDirection = useBreakpointValue({ base: "column", md: "row" });
   const userId = localStorage.getItem('id');
   const navigate = useNavigate()
+  const toast = useToast()
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -27,17 +29,38 @@ const BulkRecipes = () => {
 
   const handleUploadBulkRecipes = async () => {
     if (!file) {
-      alert("Please select a file first");
+      toast({
+        title: "Error",
+        description: "Please select a file first",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
       return;
+      
     }
 
     try {
       const response = await uploadBulkRecipes(file, userId);
-      alert("File uploaded successfully!");
+      toast({
+        title: "Error",
+        description: "File uploaded successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
       navigate('/recipes')
     } catch (error) {
-      console.error("Error in handleUploadBulkRecipes:", error);
-      alert("Failed to upload the file");
+      toast({
+        title: "Error",
+        description: "Failed to upload the file",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
     }
   };
 

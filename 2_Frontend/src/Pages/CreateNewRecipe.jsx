@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { createRecipe } from "../Services/Api/postNewRecipe";
 import { useNavigate } from "react-router-dom";
@@ -35,6 +36,7 @@ const CreateNewRecipe = () => {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast()
 
   const userId = localStorage.getItem('id');
 
@@ -63,10 +65,22 @@ const CreateNewRecipe = () => {
 
       const newRecipe = await createRecipe(formattedData);
       const recipeId = newRecipe._id;
-      alert("Recipe created successfully!");
+      toast({
+        title: "Recipe created successfully!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
       navigate(`/recipe/${recipeId}`);
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      toast({
+        title: "An error occurred. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
     } finally {
       setLoading(false);
     }

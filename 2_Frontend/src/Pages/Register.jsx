@@ -15,6 +15,7 @@ import {
   useColorModeValue,
   Link,
   FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { registerAnUser } from "../Services/Api/registerAnUser";
@@ -32,6 +33,7 @@ const Register = () => {
   } = useForm();
   const navigate = useNavigate();
   const { login } = useAuth();
+  const toast = useToast()
 
   const onSubmit = async (data) => {
     const response = await registerAnUser(data);
@@ -44,10 +46,23 @@ const Register = () => {
       localStorage.setItem("token", loginResponse.token);
       localStorage.setItem("id", loginResponse.user._id);
       login(loginResponse.user._id);
-      alert("User Registered!");
+      toast({
+        title: "User Registered!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
       navigate("/first-steps");
     } else {
-      alert(response.message || errorsMessagesInRegisterForm.registrationFailed);
+      toast({
+        title: "Registration failed.",
+        description: "Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
     }
   };
 

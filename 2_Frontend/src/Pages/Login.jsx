@@ -15,6 +15,7 @@ import {
   InputRightElement,
   Checkbox,
   FormErrorMessage,
+  useToast
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { loginUser } from "../Services/Api/loginUser";
@@ -31,16 +32,31 @@ const Login = () => {
   } = useForm();
   const navigate = useNavigate()
   const { login } = useAuth();
+  const toast = useToast();
 
   const onSubmit = async (data) => {
     const response = await loginUser(data);
     if (response.token) {
       localStorage.setItem("token", response.token);
       login(response.user._id)
-      alert("Login successful!");
+      toast({
+        title: "Login successful!",
+        description: "You have been logged in successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
       navigate("/")
     } else {
-      alert(response.message || "Login failed. Please try again.");
+      toast({
+        title: "Login failed.",
+        description: "Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
     }
   };
 

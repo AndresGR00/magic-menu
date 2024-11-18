@@ -4,6 +4,7 @@ import {
   Heading,
   Text,
   useBreakpointValue,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,10 +14,17 @@ const FirstSteps = () => {
   const flexDirection = useBreakpointValue({ base: "column", md: "row" });
   const navigate = useNavigate();
   const userId = localStorage.getItem('id');
+  const toast = useToast()
 
   const handleAddButton = () => {
     addDefaultRecipesToUser(userId)
-    alert("Recipes added!");
+    toast({
+      title: "Recipes added!",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "top-right",
+    });
     navigate("/")
   }
 
