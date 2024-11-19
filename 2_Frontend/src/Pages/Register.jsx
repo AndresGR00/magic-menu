@@ -16,6 +16,7 @@ import {
   Link,
   FormErrorMessage,
   useToast,
+  Spinner
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { registerAnUser } from "../Services/Api/registerAnUser";
@@ -26,6 +27,7 @@ import { loginUser } from "../Services/Api/loginUser";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -36,8 +38,9 @@ const Register = () => {
   const toast = useToast()
 
   const onSubmit = async (data) => {
+    setIsLoading(true)
     const response = await registerAnUser(data);
-
+    
     if (response._id) {
       const loginResponse = await loginUser({
         email: data.email,
@@ -46,6 +49,7 @@ const Register = () => {
       localStorage.setItem("token", loginResponse.token);
       localStorage.setItem("id", loginResponse.user._id);
       login(loginResponse.user._id);
+      setIsLoading(false)
       toast({
         title: "User Registered!",
         status: "success",
@@ -158,8 +162,9 @@ const Register = () => {
                     _hover={{
                       bg: "green.500",
                     }}
+                    disabled={isLoading}
                   >
-                    Register
+                    {isLoading ? <Spinner size="lg" borderWidth="4px" /> : "Register"}
                   </Button>
                 </Stack>
 

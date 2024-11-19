@@ -15,7 +15,8 @@ import {
   InputRightElement,
   Checkbox,
   FormErrorMessage,
-  useToast
+  useToast,
+  Spinner
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { loginUser } from "../Services/Api/loginUser";
@@ -25,6 +26,7 @@ import { useAuth } from "../Context/AuthContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -35,7 +37,9 @@ const Login = () => {
   const toast = useToast();
 
   const onSubmit = async (data) => {
+    setIsLoading(true)
     const response = await loginUser(data);
+    setIsLoading(false)
     if (response.token) {
       localStorage.setItem("token", response.token);
       login(response.user._id)
@@ -148,8 +152,9 @@ const Login = () => {
                     _hover={{
                       bg: "green.500",
                     }}
+                    disabled={isLoading}
                   >
-                    Sign in
+                    {isLoading ? <Spinner size="lg" borderWidth="4px" /> : "Sign in"}
                   </Button>
                 </Stack>
               </Stack>
