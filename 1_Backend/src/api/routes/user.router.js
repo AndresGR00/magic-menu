@@ -10,6 +10,7 @@ userRouter.put("/update-user/:id", userController.editAnUser);
 userRouter.delete("/delete-user/:id", userController.deleteAnUser);
 
 userRouter.post("/add-a-recipe", userController.addRecipeToUser);
+userRouter.post("/add-default-recipes", userController.addDefaultRecipesToUser);
 userRouter.delete("/delete-a-recipe-from-user", userController.deleteRecipeToUser);
 
 module.exports = userRouter;

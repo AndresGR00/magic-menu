@@ -25,7 +25,7 @@ const FirstSteps = () => {
       isClosable: true,
       position: "top-right",
     });
-    navigate("/")
+    navigate("/recipes")
   }
 
   const handlePassButton = () => {

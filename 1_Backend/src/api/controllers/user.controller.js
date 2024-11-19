@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const Recipe = require('../models/recipe.model')
 const { handleResponse } = require("../../utils/handleResponse");
 const { generateSign } = require("../../config/jwt");
 const bcrypt = require("bcrypt");
@@ -113,6 +114,21 @@ const addRecipeToUser = async (req, res, next) => {
   }
 };
 
+const addDefaultRecipesToUser = async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+    const user = await User.findById(userId);
+    if (!user) return handleResponse(res, 404, "User not found");
+
+    const defaultRecipes = await Recipe.find({defaultRecipe: true})
+    user.recipes.push(...defaultRecipes.map((recipe) => recipe._id ));
+    await user.save();
+    return handleResponse(res, 200, "Recipes added to the user");
+  } catch (error) {
+    return handleResponse(res, 500, error.message);
+  }
+}
+
 //Delete a recipe to user
 const deleteRecipeToUser = async (req, res, next) => {
   try {
@@ -141,5 +157,6 @@ module.exports = {
   editAnUser,
   deleteAnUser,
   addRecipeToUser,
+  addDefaultRecipesToUser,
   deleteRecipeToUser
 };
