@@ -5,28 +5,48 @@ import {
   Text,
   useBreakpointValue,
   useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  Spinner,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addDefaultRecipesToUser } from "../Services/Api/addDefaultRecipesToUser";
 
 const FirstSteps = () => {
   const flexDirection = useBreakpointValue({ base: "column", md: "row" });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const userId = localStorage.getItem('id');
-  const toast = useToast()
+  const userId = localStorage.getItem("id");
+  const toast = useToast();
 
-  const handleAddButton = () => {
-    addDefaultRecipesToUser(userId)
-    toast({
-      title: "Recipes added!",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-      position: "top-right",
-    });
-    navigate("/recipes")
-  }
+  const handleAddButton = async () => {
+    setIsLoading(true);
+    try {
+      await addDefaultRecipesToUser(userId);
+      toast({
+        title: "Recipes added!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+      navigate("/recipes");
+    } catch (error) {
+      toast({
+        title: "Failed to add recipes.",
+        description: "Please try again later.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handlePassButton = () => {
     navigate("/");
@@ -88,6 +108,7 @@ const FirstSteps = () => {
           colorScheme="green"
           width="280px"
           size="lg"
+          isDisabled={isLoading}
         >
           Yes! Add
         </Button>
@@ -96,10 +117,23 @@ const FirstSteps = () => {
           colorScheme="red"
           width="280px"
           size="lg"
+          isDisabled={isLoading}
         >
           Pass
         </Button>
       </Box>
+
+      {isLoading && (
+        <Modal isOpen={isLoading} onClose={() => {}} isCentered>
+          <ModalOverlay />
+          <ModalContent bg="transparent" boxShadow="none">
+            <ModalBody display="flex" justifyContent="center" alignItems="center">
+              <Spinner size="xl" color="green.400" borderWidth="4px" />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+
     </div>
   );
 };

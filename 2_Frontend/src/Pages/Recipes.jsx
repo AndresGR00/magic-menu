@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Heading, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Heading, Modal, ModalBody, ModalContent, ModalOverlay, Spinner, useBreakpointValue } from "@chakra-ui/react";
 import Sidebar from "../Components/Recipes/Sidebar/Sidebar";
 import ProductGrid from "../Components/Recipes/ProductsGrid/ProductsGrid";
 import { getRecipesFromAnUser } from "../Services/Api/getRecipesFromAnUser";
@@ -78,7 +78,6 @@ const Recipes = () => {
     applyFilters();
   }, [filters, usersRecipes]);
 
-  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -108,6 +107,17 @@ const Recipes = () => {
           )}
         </Box>
       </Flex>
+
+      {loading && (
+        <Modal isOpen={loading} onClose={() => {}} isCentered>
+          <ModalOverlay />
+          <ModalContent bg="transparent" boxShadow="none">
+            <ModalBody display="flex" justifyContent="center" alignItems="center">
+              <Spinner size="xl" color="green.400" borderWidth="4px" />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </div>
   );
 };
