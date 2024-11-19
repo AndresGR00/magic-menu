@@ -39,12 +39,12 @@ const RecipeDetail = () => {
 
   const handleDeleteRecipe = async (id) => {
     try {
-      deleteRecipeFromAnUser(id)
-      navigate('/recipes')
+      deleteRecipeFromAnUser(id);
+      navigate("/recipes");
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -175,30 +175,47 @@ const RecipeDetail = () => {
               </Box>
             </Stack>
 
-            <Button onClick={onOpen} colorScheme="red" variant="outline">
-              Delete Recipe
-            </Button>
-            <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose} isCentered>
-              <ModalOverlay />
+            {recipe.defaultRecipe ? (
+              <Button isDisabled={true} colorScheme="red" variant="outline">
+                You cannot delete default recipes
+              </Button>
+            ) : (
+              <Stack>
+                <Button onClick={onOpen} colorScheme="red" variant="outline">
+                  Delete Recipe
+                </Button>
+                <Modal
+                  blockScrollOnMount={false}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  isCentered
+                >
+                  <ModalOverlay />
 
-              <ModalContent bg="white" borderRadius="md">
-                <ModalCloseButton color="green.500" />{" "}
-                <ModalBody>
-                  <Text fontWeight="bold" mb="1rem">
-                    This action cannot be undone
-                  </Text>
-                </ModalBody>
-                <ModalFooter>
-                  <Button colorScheme="green" mr={3} onClick={onClose}>
-                    Close
-                  </Button>
+                  <ModalContent bg="white" borderRadius="md">
+                    <ModalCloseButton color="green.500" />{" "}
+                    <ModalBody>
+                      <Text fontWeight="bold" mb="1rem">
+                        This action cannot be undone
+                      </Text>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button colorScheme="green" mr={3} onClick={onClose}>
+                        Close
+                      </Button>
 
-                  <Button colorScheme="red" variant="solid" onClick={() => handleDeleteRecipe(id)}>
-                    Delete Recipe
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+                      <Button
+                        colorScheme="red"
+                        variant="solid"
+                        onClick={() => handleDeleteRecipe(id)}
+                      >
+                        Delete Recipe
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+              </Stack>
+            )}
           </Stack>
         </SimpleGrid>
       </Container>
