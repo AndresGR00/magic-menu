@@ -67,6 +67,7 @@ const Register = () => {
         isClosable: true,
         position: "top-right",
       });
+      setIsLoading(false)
     }
   };
 

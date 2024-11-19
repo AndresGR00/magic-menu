@@ -19,9 +19,7 @@ const WeeklyMenu = () => {
   const handleWeeklyMenu = async () => {
     try {
       setLoading(true);
-      const idsArray = await generateWeeklyMenu(userId);
-      const recipesPromises = idsArray.map((id) => getOneRecipe(id));
-      const recipes = await Promise.all(recipesPromises);
+      const recipes = await generateWeeklyMenu(userId);
       setWeekMenu(recipes);
     } catch (error) {
       console.error(error);

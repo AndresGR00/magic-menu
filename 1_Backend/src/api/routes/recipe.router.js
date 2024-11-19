@@ -6,6 +6,7 @@ const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
 recipeRouter.get("/all-recipes", recipeController.getAllRecipes);
+recipeRouter.get("/weekly-menu", recipeController.getWeeklyRecipes);
 recipeRouter.get("/recipe/:id", recipeController.getRecipeById);
 recipeRouter.post("/create-recipe", recipeController.createRecipe);
 recipeRouter.put("/edit-recipe/:id", recipeController.editRecipe);

@@ -37,6 +37,22 @@ const getRecipeById = async (req, res, next) => {
   }
 };
 
+//Get 7 recipes for weekly menu
+const getWeeklyRecipes = async (req, res, next) => {
+  const { userId } = req.body;
+
+  try {
+    const randomRecipes = await Recipe.aggregate([
+      { $match: { user: userId } },
+      { $sample: { size: 7 } }
+    ]);
+    return handleResponse(res, 200, randomRecipes)
+  } catch (error) {
+    console.error(error);
+    return handleResponse(res, 500, error)
+  }
+};
+
 //Create a recipe and added to the main ingredient array
 const createRecipe = async (req, res, next) => {
   try {
@@ -153,6 +169,7 @@ const createBulkRecipes = async (req, res, next) => {
 
 module.exports = {
   getAllRecipes,
+  getWeeklyRecipes,
   getRecipeById,
   createRecipe,
   editRecipe,
