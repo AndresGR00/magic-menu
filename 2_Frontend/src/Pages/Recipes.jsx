@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Flex,
-  Heading,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, useBreakpointValue } from "@chakra-ui/react";
 import Sidebar from "../Components/Recipes/Sidebar/Sidebar";
 import ProductGrid from "../Components/Recipes/ProductsGrid/ProductsGrid";
 import { getRecipesFromAnUser } from "../Services/Api/getRecipesFromAnUser";
-import '../Components/Recipes/recipes.css'
+import "../Components/Recipes/recipes.css";
 import { useAuth } from "../Context/AuthContext";
 
 const shuffleArray = (array) => {
@@ -29,10 +24,10 @@ const Recipes = () => {
     rating: [],
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); 
-  
+  const [error, setError] = useState(null);
+
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const userId = localStorage.getItem('id');
+  const userId = localStorage.getItem("id");
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -84,12 +79,20 @@ const Recipes = () => {
   }, [filters, usersRecipes]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>; 
-  
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div className="mm-recipes-section">
       <Flex direction={{ base: "column", md: "row" }} minH="80vh">
-        <Box mb={4} p={4} w={isMobile ? undefined : "300px"}>
+        <Box
+          mb={4}
+          p={4}
+          position={isMobile ? "relative" : "sticky"}
+          top="0"
+          alignSelf={isMobile ? undefined : "start"}
+          h="fit-content"
+          w={isMobile ? undefined : "300px"}
+        >
           <Sidebar filters={filters} setFilters={setFilters} />
         </Box>
 
