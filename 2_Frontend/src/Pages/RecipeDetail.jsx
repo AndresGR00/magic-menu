@@ -22,6 +22,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
+  Spinner,
 } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getOneRecipe } from "../Services/Api/getOneRecipe";
@@ -33,7 +34,7 @@ const RecipeDetail = () => {
   const [recipe, setRecipe] = useState(null);
   const [badgeBgColor, setBadgeBgColor] = useState("white");
   const [badgeColor, setBadgeColor] = useState("black");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -47,6 +48,7 @@ const RecipeDetail = () => {
   };
 
   useEffect(() => {
+    setLoading(true)
     const fetchRecipe = async () => {
       try {
         const data = await getOneRecipe(id);
@@ -67,7 +69,19 @@ const RecipeDetail = () => {
     fetchRecipe();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
+
+  if (loading) {
+    return (
+      <Modal isOpen={loading} onClose={() => {}} isCentered>
+        <ModalOverlay />
+        <ModalContent bg="transparent" boxShadow="none">
+          <ModalBody display="flex" justifyContent="center" alignItems="center">
+            <Spinner size="xl" color="green.400" borderWidth="4px" />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
+  }
   if (error) return <div>Error: {error.message}</div>;
   if (!recipe) return <div>No recipe found</div>;
 

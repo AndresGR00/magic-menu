@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { generateWeeklyMenu } from "../Services/Api/generateWeeklyMenu";
 import { getOneRecipe } from "../Services/Api/getOneRecipe";
 import { NavLink } from "react-router-dom";
-import { Grid, Badge, Box, Stack, Text, Image, Button } from "@chakra-ui/react";
+import { Grid, Badge, Box, Stack, Text, Image, Button, Modal, ModalOverlay, ModalContent, ModalBody, Spinner } from "@chakra-ui/react";
 import { getColorBadge } from "../Data/recipeBagdeColor";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const WeeklyMenu = () => {
-  const userId = localStorage.getItem('id');
+  const userId = localStorage.getItem("id");
   const [weekMenu, setWeekMenu] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -30,7 +30,6 @@ const WeeklyMenu = () => {
     }
   };
 
-  
   const handleGeneratePDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(18);
@@ -49,15 +48,54 @@ const WeeklyMenu = () => {
       Time: `${recipe.time} min`,
     }));
 
-    
     doc.autoTable({
       head: [
         [
-          { content: "Title", styles: { fillColor: "green", textColor: "white", halign: "center", valign: "middle" } },
-          { content: "Description", styles: { fillColor: "green", textColor: "white", halign: "center", valign: "middle" } },
-          { content: "Main Ingredient", styles: { fillColor: "green", textColor: "white", halign: "center", valign: "middle" } },
-          { content: "Ingredients", styles: { fillColor: "green", textColor: "white", halign: "center", valign: "middle" } },
-          { content: "Time", styles: { fillColor: "green", textColor: "white", halign: "center", valign: "middle" } },
+          {
+            content: "Title",
+            styles: {
+              fillColor: "green",
+              textColor: "white",
+              halign: "center",
+              valign: "middle",
+            },
+          },
+          {
+            content: "Description",
+            styles: {
+              fillColor: "green",
+              textColor: "white",
+              halign: "center",
+              valign: "middle",
+            },
+          },
+          {
+            content: "Main Ingredient",
+            styles: {
+              fillColor: "green",
+              textColor: "white",
+              halign: "center",
+              valign: "middle",
+            },
+          },
+          {
+            content: "Ingredients",
+            styles: {
+              fillColor: "green",
+              textColor: "white",
+              halign: "center",
+              valign: "middle",
+            },
+          },
+          {
+            content: "Time",
+            styles: {
+              fillColor: "green",
+              textColor: "white",
+              halign: "center",
+              valign: "middle",
+            },
+          },
         ],
       ],
       body: pdfData.map((item) => [
@@ -74,12 +112,33 @@ const WeeklyMenu = () => {
   };
 
   return (
-    <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-      {loading && <div>Loading...</div>}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {loading && (
+        <div>
+          <Modal isOpen={loading} onClose={() => {}} isCentered>
+            <ModalOverlay />
+            <ModalContent bg="transparent" boxShadow="none">
+              <ModalBody
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Spinner size="xl" color="green.400" borderWidth="4px" />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </div>
+      )}
 
       {!loading && weekMenu.length > 0 && (
         <>
-          
           <Grid
             templateColumns={{
               base: "repeat(1, 1fr)",
